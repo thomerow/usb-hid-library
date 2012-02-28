@@ -117,13 +117,13 @@ namespace HIDUSBLib
          HidApiDecl.HidD_GetHidGuid(ref _guid);
       }
 
-      public IntPtr CT_SetupDiGetClassDevs()
+      public IntPtr SetupDiGetClassDevs()
       {
          _hDevInfo = SetupDiGetClassDevs(ref _guid, null, IntPtr.Zero, DIGCF_INTERFACEDEVICE | DIGCF_PRESENT);
          return _hDevInfo;
       }
 
-      public bool CT_SetupDiEnumDeviceInterfaces(UInt32 memberIndex)
+      public bool SetupDiEnumDeviceInterfaces(UInt32 memberIndex)
       {
          _deviceInterfaceData = new SP_DEVICE_INTERFACE_DATA();
          _deviceInterfaceData.cbSize = Marshal.SizeOf(_deviceInterfaceData);
@@ -131,7 +131,7 @@ namespace HIDUSBLib
          return bResult;
       }
 
-      public bool CT_SetupDiGetDeviceInterfaceDetail()
+      public bool SetupDiGetDeviceInterfaceDetail()
       {
          UInt32 uDeviceInterfaceDetailDataSize = 0, uRequiredSize = 0;
          _deviceInterfaceDetailData = new SP_DEVICE_INTERFACE_DETAIL_DATA();
@@ -159,7 +159,7 @@ namespace HIDUSBLib
          return bResult;
       }
 
-      public int CT_CreateFile(string DeviceName)
+      public int CreateFile(string DeviceName)
       {
          _hHid = CreateFile(
             DeviceName,
@@ -174,25 +174,25 @@ namespace HIDUSBLib
          else return 1;
       }
 
-      public int CT_CloseHandle()
+      public int CloseHandle()
       {
          _hHid = (IntPtr)INVALID_HANDLE_VALUE;
          // return CloseHandle(hObject);  // DOES NOT WORK (hangs most of the time)
          return -1;
       }
 
-      public bool CT_HidD_GetPreparsedData(ref IntPtr pHidpPreparsedData)
+      public bool HidD_GetPreparsedData(ref IntPtr pHidpPreparsedData)
       {
          return HidApiDecl.HidD_GetPreparsedData(_hHid, ref pHidpPreparsedData);
       }
 
-      public int CT_HidP_GetCaps(IntPtr pHidpPreparsedData)
+      public int HidP_GetCaps(IntPtr pHidpPreparsedData)
       {
          _hidpCaps = new HIDP_CAPS();
          return HidApiDecl.HidP_GetCaps(pHidpPreparsedData, ref _hidpCaps);
       }
 
-      public byte[] CT_ReadFile(UInt32 uInputReportByteLength)
+      public byte[] ReadFile(UInt32 uInputReportByteLength)
       {
          UInt32 uBytesRead = 0;
 
@@ -203,14 +203,14 @@ namespace HIDUSBLib
          else return null;
       }
 
-      public bool CT_SetupDiDestroyDeviceInfoList()
+      public bool SetupDiDestroyDeviceInfoList()
       {
          bool bResult = SetupDiDestroyDeviceInfoList(_hDevInfo);
          _hDevInfo = (IntPtr)INVALID_HANDLE_VALUE;
          return bResult;
       }
 
-      public bool CT_HidD_FreePreparsedData(IntPtr pHidpPreparsedData)
+      public bool HidD_FreePreparsedData(IntPtr pHidpPreparsedData)
       {
          return SetupDiDestroyDeviceInfoList(pHidpPreparsedData);
       }

@@ -93,16 +93,16 @@ namespace HIDUSBLib
 
          // Get GUID and handle
          _core.CT_HidGuid();
-         _core.CT_SetupDiGetClassDevs();
+         _core.SetupDiGetClassDevs();
 
          // Search the device
          while (bResult)
          {
             // Open device
-            bResult = _core.CT_SetupDiEnumDeviceInterfaces(uDeviceCount);
+            bResult = _core.SetupDiEnumDeviceInterfaces(uDeviceCount);
 
             // Get device path
-            _core.CT_SetupDiGetDeviceInterfaceDetail();
+            _core.SetupDiGetDeviceInterfaceDetail();
 
             // Check if the device path contains vid and pid
             string deviceID = VendorID + "&" + ProductID;
@@ -114,18 +114,18 @@ namespace HIDUSBLib
                bDeviceFound = true;
 
                // Init device
-               _core.CT_SetupDiEnumDeviceInterfaces(_uDeviceCount);
+               _core.SetupDiEnumDeviceInterfaces(_uDeviceCount);
 
-               _core.CT_SetupDiGetDeviceInterfaceDetail();
+               _core.SetupDiGetDeviceInterfaceDetail();
 
                // Create device handle
-               _core.CT_CreateFile(this._strDevicePath);
+               _core.CreateFile(this._strDevicePath);
                break;
             }
             ++uDeviceCount;
          }
 
-         _core.CT_SetupDiDestroyDeviceInfoList();
+         _core.SetupDiDestroyDeviceInfoList();
 
          IsConnected = bDeviceFound;
          return IsConnected;
@@ -201,15 +201,15 @@ namespace HIDUSBLib
          {
             pPreparsedData = IntPtr.Zero;
 
-            if (_core.CT_HidD_GetPreparsedData(ref pPreparsedData))
+            if (_core.HidD_GetPreparsedData(ref pPreparsedData))
             {
-               int code = _core.CT_HidP_GetCaps(pPreparsedData);
+               int code = _core.HidP_GetCaps(pPreparsedData);
                int reportLength = _core._hidpCaps.InputReportByteLength;
 
                do
                {
                   // Read data
-                  byte[] dataReceived = _core.CT_ReadFile(_core._hidpCaps.InputReportByteLength);
+                  byte[] dataReceived = _core.ReadFile(_core._hidpCaps.InputReportByteLength);
                   if (dataReceived != null)
                   {
                      _nByteCount += dataReceived.Length;
@@ -245,7 +245,7 @@ namespace HIDUSBLib
       {
          if (IsConnected)
          {
-            _core.CT_CloseHandle();
+            _core.CloseHandle();
             IsConnected = false;
          }
       }
@@ -285,16 +285,16 @@ namespace HIDUSBLib
 
             // Get GUID and handle
             _core.CT_HidGuid();
-            _core.CT_SetupDiGetClassDevs();
+            _core.SetupDiGetClassDevs();
 
             // Search the device until you have found it or no more devices in list
             while (bResult)
             {
                // Open the device
-               bResult = _core.CT_SetupDiEnumDeviceInterfaces(uDeviceCount);
+               bResult = _core.SetupDiEnumDeviceInterfaces(uDeviceCount);
 
                // Get device path
-               _core.CT_SetupDiGetDeviceInterfaceDetail();
+               _core.SetupDiGetDeviceInterfaceDetail();
 
                // Is this the correct device?
                string deviceID = VendorID;
@@ -307,7 +307,7 @@ namespace HIDUSBLib
                uDeviceCount++;
             }
 
-            _core.CT_SetupDiDestroyDeviceInfoList();
+            _core.SetupDiDestroyDeviceInfoList();
 
             return devices.ToArray();
          }
@@ -371,7 +371,7 @@ namespace HIDUSBLib
       {
          if (!this._bDisposed)
          {
-            if (_core._hHid != (IntPtr)Core.INVALID_HANDLE_VALUE) _core.CT_CloseHandle();
+            if (_core._hHid != (IntPtr)Core.INVALID_HANDLE_VALUE) _core.CloseHandle();
             this._bDisposed = true;
          }
       }
