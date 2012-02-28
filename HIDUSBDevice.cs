@@ -92,7 +92,7 @@ namespace HIDUSBLib
          UInt32 uDeviceCount = 0;
 
          // Get GUID and handle
-         _core.CT_HidGuid();
+         _core.HidD_GetHidGuid();
          _core.SetupDiGetClassDevs();
 
          // Search the device
@@ -284,7 +284,7 @@ namespace HIDUSBLib
             UInt32 uNumberOfDevices = 0;
 
             // Get GUID and handle
-            _core.CT_HidGuid();
+            _core.HidD_GetHidGuid();
             _core.SetupDiGetClassDevs();
 
             // Search the device until you have found it or no more devices in list

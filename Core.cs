@@ -112,7 +112,7 @@ namespace HIDUSBLib
 
       // Managed Code wrappers for the DLL Calls
 
-      public void CT_HidGuid()
+      public void HidD_GetHidGuid()
       {
          HidApiDecl.HidD_GetHidGuid(ref _guid);
       }
